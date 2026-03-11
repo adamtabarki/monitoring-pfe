@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check docker-compose exists
+        run: test -f docker-compose.yml
+
+      - name: Check Prometheus config exists
+        run: test -f prometheus/prometheus.yml
+
+      - name: Validate docker compose syntax
+        run: docker compose -f docker-compose.yml config
+
+      - name: Show project structure
+        run: ls -R
